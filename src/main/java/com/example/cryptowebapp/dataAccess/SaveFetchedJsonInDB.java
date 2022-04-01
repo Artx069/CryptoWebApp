@@ -12,19 +12,22 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 
 @Service
 @EnableScheduling
 public class SaveFetchedJsonInDB {
 
+    private static ArrayList<CoinData> restRepository;
     @Autowired
     private JsonRepository jsonRepository;
+
 
 
     @Scheduled(fixedRate = 5000)
     public void saveJson(){
         JsonArray jsonArray = GetJsonData.getJsonArray();
-
+        ArrayList<CoinData> dataForRestRepository = new ArrayList<>();
         for(JsonElement e : jsonArray){
             JsonObject jsonObject = e.getAsJsonObject();
             String id = jsonObject.get("id").getAsString();
@@ -43,9 +46,15 @@ public class SaveFetchedJsonInDB {
             coinData.setCurrent_price(new BigDecimal(currentPrice).toPlainString());
             coinData.setMarket_cap(marketCap);
 
+            dataForRestRepository.add(coinData);
             jsonRepository.insert(coinData);
 
         }
+        this.restRepository = dataForRestRepository;
+    }
+
+    public static ArrayList<CoinData> getCurrentCoinDataForRestController(){
+        return restRepository;
     }
 
 }

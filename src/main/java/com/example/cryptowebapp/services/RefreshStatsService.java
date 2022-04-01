@@ -1,6 +1,7 @@
 package com.example.cryptowebapp.services;
 
 import com.example.cryptowebapp.business.CryptoCurrencyList;
+import com.example.cryptowebapp.dataAccess.SaveFetchedJsonInDB;
 import com.example.cryptowebapp.models.CoinData;
 import com.example.cryptowebapp.repositories.JsonRepository;
 import com.google.gson.Gson;
@@ -17,7 +18,7 @@ public class RefreshStatsService {
 
     public String refresh(){
         try {
-            List<CoinData> coinDataList = jsonRepository.findAll().subList((int) (jsonRepository.count() - 10), (int) jsonRepository.count());
+            List<CoinData> coinDataList = SaveFetchedJsonInDB.getCurrentCoinDataForRestController();
             String json = new Gson().toJson(coinDataList);
             return json;
         }catch (Exception e){

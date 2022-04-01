@@ -33,8 +33,6 @@ const runAsync = () => {
                     let currentPrice = document.getElementById(obj["name"] +"_currentPrice");
                     let marketCap = document.getElementById(obj["name"] +"_marketCap");
 
-                    // Farbenwechsel: rot bei Kursfall; grün bei Anstieg
-                    //const randomColor = Math.floor(Math.random()*16777215).toString(16);
                     Number(currentPrice.innerText) > Number(obj["current_price"]) ? currentPrice.style.color = "red" : Number(currentPrice.innerText) == Number(obj["current_price"]) ? currentPrice.style.color = "black" : currentPrice.style.color = "green";
                     currentPrice.innerText =  obj["current_price"];
                     marketCap.innerText = obj["market_cap"];
@@ -42,7 +40,7 @@ const runAsync = () => {
             }
         });
         v;
-    }, 5257)
+    }, 5000)
 }
 
 runAsync();
