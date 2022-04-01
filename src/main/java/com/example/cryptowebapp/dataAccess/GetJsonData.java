@@ -21,7 +21,6 @@ public class GetJsonData {
         try
         {
             // Connect to the URL using java's native library
-            System.out.println(API_URL);
             URL url = new URL(API_URL);
             URLConnection request = url.openConnection();
             request.connect();

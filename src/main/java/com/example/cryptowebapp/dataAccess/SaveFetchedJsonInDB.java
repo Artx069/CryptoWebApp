@@ -21,7 +21,7 @@ public class SaveFetchedJsonInDB {
     private JsonRepository jsonRepository;
 
 
-    @Scheduled(fixedRate = 30000)
+    @Scheduled(fixedRate = 5000)
     public void saveJson(){
         JsonArray jsonArray = GetJsonData.getJsonArray();
 

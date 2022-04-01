@@ -27,18 +27,22 @@ const runAsync = () => {
 
             if (err != null) {
                 console.error(err);
-            } else {
+            }else if(data != null){
+                console.log("updated")
                 for(let obj of data){
                     let currentPrice = document.getElementById(obj["name"] +"_currentPrice");
                     let marketCap = document.getElementById(obj["name"] +"_marketCap");
 
+                    // Farbenwechsel: rot bei Kursfall; grün bei Anstieg
+                    //const randomColor = Math.floor(Math.random()*16777215).toString(16);
+                    Number(currentPrice.innerText) > Number(obj["current_price"]) ? currentPrice.style.color = "red" : Number(currentPrice.innerText) == Number(obj["current_price"]) ? currentPrice.style.color = "black" : currentPrice.style.color = "green";
                     currentPrice.innerText =  obj["current_price"];
                     marketCap.innerText = obj["market_cap"];
                 }
             }
         });
         v;
-    }, 5000)
+    }, 5257)
 }
 
 runAsync();
