@@ -1,0 +1,10 @@
+JS-Script:
+- Refresher neuschreiben, weil die neue Coin noch nicht in der DB ist, somit muss er immer auf den Cron warten
+
+DB:
+- Datenbank auf SQL umstellen
+ --> zu starke Abhängkeit hardgecoded, somit wird biem adden von neuen Coins die Liste biem Setup falsch geladen
+    z.B. wird Bitcoin & Ethereum nicht geladen, weil zwei neue Coins in der DB sind
+
+
+Price -> Scientic Notation entfernen in JS

@@ -16,7 +16,8 @@
     <h1>Crypto Coin Application</h1>
     <p>This application lists the current prices of different crypto currencies</p>
 
-    <table class="table table-hover">
+    <table  class="table table-hover">
+        <tbody id="coinListTable">
         <tr>
             <th>Name</th>
             <th>Symbol</th>
@@ -25,14 +26,18 @@
 
         </tr>
         <tr th:each="coinData : ${coinDataList}">
-            <td th:text="${coinData.getName()}"></td>
+            <td th:id="${coinData.getName()}" th:text="${coinData.getName()}"></td>
             <td th:text="${coinData.getSymbol()}"></td>
             <td th:id="${coinData.getName()} + '_currentPrice'" th:text="${coinData.getCurrent_price()}"></td>
             <td th:id="${coinData.getName()} + '_marketCap'" th:text="${coinData.getMarket_cap()}"></td>
 
         </tr>
+        </tbody>
+
     </table>
 </div>
+    <input type="text" id="testInput">
+    <button type="button" id="btnTest">Add coin</button>
     <script th:src="@{../static/myscript.js}"></script>
     <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
 </body>

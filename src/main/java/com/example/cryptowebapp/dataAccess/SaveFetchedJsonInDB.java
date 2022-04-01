@@ -1,6 +1,7 @@
 package com.example.cryptowebapp.dataAccess;
 
 
+import com.example.cryptowebapp.business.CryptoCurrencyList;
 import com.example.cryptowebapp.models.CoinData;
 import com.example.cryptowebapp.repositories.JsonRepository;
 import com.google.gson.JsonArray;
@@ -26,7 +27,7 @@ public class SaveFetchedJsonInDB {
 
     @Scheduled(fixedRate = 5000)
     public void saveJson(){
-        JsonArray jsonArray = GetJsonData.getJsonArray();
+        JsonArray jsonArray = GetJsonData.getJsonArray(CryptoCurrencyList.getCommaSeparatedList());
         ArrayList<CoinData> dataForRestRepository = new ArrayList<>();
         for(JsonElement e : jsonArray){
             JsonObject jsonObject = e.getAsJsonObject();
@@ -55,6 +56,12 @@ public class SaveFetchedJsonInDB {
 
     public static ArrayList<CoinData> getCurrentCoinDataForRestController(){
         return restRepository;
+    }
+
+    public static JsonArray getAddedCoinData(String coinId){
+        JsonArray jsonArray = GetJsonData.getJsonArray(coinId);
+        System.out.println(jsonArray);
+        return jsonArray;
     }
 
 }
