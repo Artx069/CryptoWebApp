@@ -30,8 +30,8 @@ const runAsync = () => {
             }else if(data != null){
                 console.log("updated")
                 for(let obj of data){
-                    let currentPrice = document.getElementById(obj["name"] +"_currentPrice");
-                    let marketCap = document.getElementById(obj["name"] +"_marketCap");
+                    let currentPrice = document.getElementById(obj["name"] +"_currentPrice")[-1];
+                    let marketCap = document.getElementById(obj["name"] +"_marketCap")[-1];
 
                     Number(currentPrice.innerText) > Number(obj["current_price"]) ? currentPrice.style.color = "red" : Number(currentPrice.innerText) == Number(obj["current_price"]) ? currentPrice.style.color = "black" : currentPrice.style.color = "green";
                     currentPrice.innerText =  obj["current_price"];

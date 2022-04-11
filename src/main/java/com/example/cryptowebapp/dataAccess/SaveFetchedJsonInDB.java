@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.List;
 
 @Service
 @EnableScheduling
@@ -24,7 +25,7 @@ public class SaveFetchedJsonInDB {
 
 
 
-    @Scheduled(fixedRate = 5000)
+    @Scheduled(fixedRate = 30000)
     public void saveJson(){
         JsonArray jsonArray = GetJsonData.getJsonArray();
         ArrayList<CoinData> dataForRestRepository = new ArrayList<>();
@@ -36,18 +37,23 @@ public class SaveFetchedJsonInDB {
             String currentPrice = jsonObject.get("current_price").getAsString();
             String marketCap = jsonObject.get("market_cap").getAsString();
 
-            int lastId = jsonRepository.findFirstByOrderByIdDesc().isPresent() ? (int) jsonRepository.findFirstByOrderByIdDesc().get().getId() : 0;
+            if(!jsonRepository.existsByCoinId(id)){
+                CoinData coinData = new CoinData(
+                        id,
+                        symbol,
+                        name,
+                        List.of(new BigDecimal(currentPrice).toPlainString()),
+                        List.of(new BigDecimal(marketCap).toPlainString()));
 
-            CoinData coinData = new CoinData();
-            coinData.setId(lastId +1);
-            coinData.setCoinId(id);
-            coinData.setSymbol(symbol);
-            coinData.setName(name);
-            coinData.setCurrent_price(new BigDecimal(currentPrice).toPlainString());
-            coinData.setMarket_cap(marketCap);
+                dataForRestRepository.add(coinData);
+                jsonRepository.save(coinData);
+            }else{
+                CoinData coinData = jsonRepository.getByCoinId(id).get();
+                coinData.addCurrentPrice(currentPrice);
+                coinData.addmarketCap(marketCap);
+                jsonRepository.save(coinData);
 
-            dataForRestRepository.add(coinData);
-            jsonRepository.insert(coinData);
+            }
 
         }
         this.restRepository = dataForRestRepository;
