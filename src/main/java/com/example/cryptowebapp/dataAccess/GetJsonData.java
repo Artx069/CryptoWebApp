@@ -15,13 +15,12 @@ import java.net.URLConnection;
 public class GetJsonData {
     //private static String API_URL = "https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&ids=" + CryptoCurrencyList.getCommaSeparatedList() +"&order=market_cap_desc&per_page=100&page=1&sparkline=false";
 
-    public static JsonArray getJsonArray(String coinIDs)
+    public static JsonArray getJsonArray()
     {
         tryToConnectToAPI();
         try
         {
-            String API_URL = "https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&ids=" + coinIDs +"&order=market_cap_desc&per_page=100&page=1&sparkline=false";
-            System.out.println(API_URL);
+            String API_URL = "https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&ids=" + CryptoCurrencyList.getCommaSeparatedList() +"&order=market_cap_desc&per_page=100&page=1&sparkline=false";
             // Connect to the URL using java's native library
             URL url = new URL(API_URL);
             URLConnection request = url.openConnection();

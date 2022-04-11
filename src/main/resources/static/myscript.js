@@ -39,12 +39,15 @@ const runAsync = () => {
                 console.log("updated")
                 for(let obj of data){
                     if(document.getElementById(obj["name"])){
-                        let currentPrice = document.getElementById(obj["name"] +"_currentPrice");
-                        let marketCap = document.getElementById(obj["name"] +"_marketCap");
+                        let currentPriceActualInnerText = document.getElementById(obj["name"] +"_currentPrice");
+                        let marketCapActualInnerText = document.getElementById(obj["name"] +"_marketCap");
 
-                        Number(currentPrice.innerText) > Number(obj["current_price"]) ? currentPrice.style.color = "red" : Number(currentPrice.innerText) == Number(obj["current_price"]) ? currentPrice.style.color = "black" : currentPrice.style.color = "green";
-                        currentPrice.innerText =  obj["current_price"];
-                        marketCap.innerText = obj["market_cap"];
+                        let currentPriceAcutalObject = obj["current_price"].slice(-1)[0];
+                        let marketCapAcutalObject = obj["market_cap"].slice(-1)[0];
+                        Number(currentPriceActualInnerText.innerText) > Number(currentPriceAcutalObject) ? currentPriceActualInnerText.style.color = "red" : Number(currentPriceActualInnerText.innerText) == Number(currentPriceAcutalObject) ? currentPriceActualInnerText.style.color = "black" : currentPriceActualInnerText.style.color = "green";
+                        currentPriceActualInnerText.innerText =  currentPriceAcutalObject;
+                        marketCapActualInnerText.innerText = marketCapAcutalObject;
+
                     }else{
                         appendCoinData(obj);
                     }
@@ -74,6 +77,7 @@ btnTest.addEventListener("click", function(){
             console.error(err);
         }else if(data != null){
             console.log("updated")
+            console.log(data)
             for(let obj of data){
                 appendCoinData(obj);
             }
@@ -82,24 +86,28 @@ btnTest.addEventListener("click", function(){
 })
 
 function appendCoinData(obj){
-    let table = document.getElementById("coinListTable");
+    console.log("appending")
+    if(document.getElementById(obj["name"]) == null){
+        let table = document.getElementById("coinListTable");
 
-    let tr = document.createElement("tr");
-    let tdCoinName = document.createElement("td");
-    let tdCoinSymbol = document.createElement("td");
-    let tdCoinCurrentPrice = document.createElement("td");
-    let tdCoinMarketCap = document.createElement("td");;
+        let tr = document.createElement("tr");
+        let tdCoinName = document.createElement("td");
+        let tdCoinSymbol = document.createElement("td");
+        let tdCoinCurrentPrice = document.createElement("td");
+        let tdCoinMarketCap = document.createElement("td");;
 
-    tdCoinName.id = obj["name"];
-    tdCoinName.innerText = obj["name"];
-    tdCoinSymbol.innerText = obj["symbol"];
-    tdCoinCurrentPrice.innerText = Number(((obj["current_price"]).toString())).toPrecision();
-    tdCoinCurrentPrice.id = obj["name"] +"_currentPrice";
-    tdCoinMarketCap.innerText = obj["market_cap"];
-    tdCoinMarketCap.id = obj["name"] +"_marketCap";
+        tdCoinName.id = obj["name"];
+        tdCoinName.innerText = obj["name"];
+        tdCoinSymbol.innerText = obj["symbol"];
+        tdCoinCurrentPrice.innerText = Number(((obj["current_price"]).toString())).toPrecision();
+        tdCoinCurrentPrice.id = obj["name"] +"_currentPrice";
+        tdCoinMarketCap.innerText = obj["market_cap"];
+        tdCoinMarketCap.id = obj["name"] +"_marketCap";
 
-    tr.append(tdCoinName, tdCoinSymbol,tdCoinCurrentPrice,tdCoinMarketCap);
-    table.append(tr)
+        tr.append(tdCoinName, tdCoinSymbol,tdCoinCurrentPrice,tdCoinMarketCap);
+        table.append(tr)
+    }
+
 }
 
 

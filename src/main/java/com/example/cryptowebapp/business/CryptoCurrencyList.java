@@ -28,6 +28,10 @@ public class CryptoCurrencyList {
         return commaSeparatedList;
     }
 
+    public static ArrayList<String> getCRYPTO_CURRENCY_LIST(){
+        return CRYPTO_CURRENCY_LIST;
+    }
+
     public static void addCoin(String coinID){
         if(!CRYPTO_CURRENCY_LIST.contains(coinID)) {
             CRYPTO_CURRENCY_LIST.add(coinID);

@@ -1,7 +1,6 @@
 package com.example.cryptowebapp.dataAccess;
 
 
-import com.example.cryptowebapp.business.CryptoCurrencyList;
 import com.example.cryptowebapp.models.CoinData;
 import com.example.cryptowebapp.repositories.JsonRepository;
 import com.google.gson.JsonArray;
@@ -14,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.List;
 
 @Service
 @EnableScheduling
@@ -25,9 +25,9 @@ public class SaveFetchedJsonInDB {
 
 
 
-    @Scheduled(fixedRate = 5000)
+    @Scheduled(fixedRate = 30000)
     public void saveJson(){
-        JsonArray jsonArray = GetJsonData.getJsonArray(CryptoCurrencyList.getCommaSeparatedList());
+        JsonArray jsonArray = GetJsonData.getJsonArray();
         ArrayList<CoinData> dataForRestRepository = new ArrayList<>();
         for(JsonElement e : jsonArray){
             JsonObject jsonObject = e.getAsJsonObject();
@@ -37,19 +37,24 @@ public class SaveFetchedJsonInDB {
             String currentPrice = jsonObject.get("current_price").getAsString();
             String marketCap = jsonObject.get("market_cap").getAsString();
 
-            int lastId = jsonRepository.findFirstByOrderByIdDesc().isPresent() ? (int) jsonRepository.findFirstByOrderByIdDesc().get().getId() : 0;
+            CoinData coinData;
+            if(!jsonRepository.existsByCoinId(id)){
+                coinData = new CoinData(
+                        id,
+                        symbol,
+                        name,
+                        List.of(new BigDecimal(currentPrice).toPlainString()),
+                        List.of(new BigDecimal(marketCap).toPlainString()));
 
-            CoinData coinData = new CoinData();
-            coinData.setId(lastId +1);
-            coinData.setCoinId(id);
-            coinData.setSymbol(symbol);
-            coinData.setName(name);
-            coinData.setCurrent_price(new BigDecimal(currentPrice).toPlainString());
-            coinData.setMarket_cap(marketCap);
 
+            }else{
+                coinData = jsonRepository.getByCoinId(id).get();
+                coinData.addCurrentPrice(new BigDecimal(currentPrice).toPlainString());
+                coinData.addmarketCap(new BigDecimal(marketCap).toPlainString());
+
+            }
+            jsonRepository.save(coinData);
             dataForRestRepository.add(coinData);
-            jsonRepository.insert(coinData);
-
         }
         this.restRepository = dataForRestRepository;
     }
@@ -59,7 +64,7 @@ public class SaveFetchedJsonInDB {
     }
 
     public static JsonArray getAddedCoinData(String coinId){
-        JsonArray jsonArray = GetJsonData.getJsonArray(coinId);
+        JsonArray jsonArray = GetJsonData.getJsonArray();
         System.out.println(jsonArray);
         return jsonArray;
     }
